@@ -18,7 +18,7 @@ trigger:
 - releases/*
 ```
 
-![CIImage](Scenario1/Images/CITrigger.PNG)
+![CIImage](Images/CITrigger.PNG)
 
 
 **2) There will be test projects which will create and maintained in the solution along the Web and API.**
@@ -31,8 +31,8 @@ I have created a sample C# solution containing 3 projects:
 
 The unit test project contains test cases to test the methods defined in Web Api controller class. The test project creates a simple list of product and validate the results generated from methods defined for getting all products and getting a single product by ID.
 
-1. Link to controller class : [ProductController.cs](Scenario1/Source/StoreApp/Controllers/ProductController.cs)
-2. Link to test class : [UnitTest1.cs](Scenario1/Source/StoreApp.Tests/UnitTest1.cs)
+1. Link to controller class : [ProductController.cs](Source/StoreApp/Controllers/ProductController.cs)
+2. Link to test class : [UnitTest1.cs](Source/StoreApp.Tests/UnitTest1.cs)
 
 Azure Pipelines provide Visual Studio Build Task to build solution using MSBuild. Users can also build project (.*proj) files , default value for this task is **\*.sln which means solution file in any folder in the repo. The solution build task will build all projects under a solution.
 
@@ -59,12 +59,12 @@ Azure Pipelines provide Visual Studio Test Task to run unit and functional tests
 ```
 1: Below screen shot is showing the pipeline execution when the test case execution failed and it aborted the pipeline execution:
 
-![TestCaseFailure](Scenario1/Images/TestCaseFailure.PNG)
+![TestCaseFailure](Images/TestCaseFailure.PNG)
 
 2: Below screen shots are showing the pipeline execution when the test case execution was successful and it moved to the next task of publishing the build artifacts:
 
-![TestCaseSuccess](Scenario1/Images/TestCaseSuccess.PNG)
-![TestCaseResult](Scenario1/Images/TestCaseResult.PNG)
+![TestCaseSuccess](Images/TestCaseSuccess.PNG)
+![TestCaseResult](Images/TestCaseResult.PNG)
 
 
 **3) The deployment of code and artifacts should be automated to Dev environment.**
@@ -72,7 +72,7 @@ Azure Devops release pipelines provide Continuous Delivery (CD) to build, test, 
 
 Continuous deployment triggers allow users to create a release every time a new build artifact is available.Select the Continuous deployment trigger icon in the Artifacts section to open the trigger panel. Make sure this is enabled so that a new release is created after every new successful build is completed.
 
-![CDTrigger](Scenario1/Images/CDTrigger.PNG)
+![CDTrigger](Images/CDTrigger.PNG)
 
 **4) Upon successful deployment to the Dev environment, deployment should be easily promoted to QA**
 **and Prod through automated process.**
@@ -80,10 +80,10 @@ Continuous deployment triggers allow users to create a release every time a new 
 Azure Devops release pipeline provide logical separation boundaries to run the tasks.It can be used to mark separation of environments (for example, Build, QA, and production). When users define multiple stages in a pipeline, by default, they run one after the other. You can specify the conditions for when a stage runs.Each stage in a release pipeline can be configured with pre-deployment and post-deployment conditions that can include waiting for users to manually approve or reject deployments, and checking with other automated systems that specific conditions are met.
 
 Select the Pre-deployment conditions icon in the Dev Stage section to open the conditions panel. Make sure that the trigger for deployment to this stage is set to After release. This means that a deployment will be initiated automatically when a new release is created from this release pipeline.
-![CDTriggerDev](Scenario1/Images/CDTriggerDev.PNG)
+![CDTriggerDev](Images/CDTriggerDev.PNG)
 
 Select the Pre-deployment conditions icon in the QA and Prod Stage section to open the conditions panel.Use the "Stage" option to deploy after deployments to selected stages are successful.
-![CDTriggerQA](Scenario1/Images/CDTriggerQA.PNG)
+![CDTriggerQA](Images/CDTriggerQA.PNG)
 
 It is recommended to always verify if app is working properly in Dev or test stage before deploying to production or other environments. Adding Pre-deployment approvals will ensure users can approve or reject deployments to stages.Select the users who can approve or reject deployments to this stage. By default, all users must approve the deployment. If a group is added, one user in the group must approve the deployment
-![CDApproval](Scenario1/Images/CDApproval.PNG)
+![CDApproval](Images/CDApproval.PNG)
