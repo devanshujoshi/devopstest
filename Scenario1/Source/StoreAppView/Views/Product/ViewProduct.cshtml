@@ -1,0 +1,33 @@
+﻿@model StoreAppView.Models.Product
+@{
+    ViewBag.Title = "ViewProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<h2>ViewProduct</h2>
+<table>
+    <tr>
+        <th>ProductId</th>
+        <th>ProductName</th>
+        <th>Price</th>
+    </tr>
+
+    <tr>
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
+        <td>@Model.Price</td>
+    </tr>
+</table>

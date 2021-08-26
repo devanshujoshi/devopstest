@@ -19,3 +19,16 @@ trigger:
 ```
 
 ![CIImage](Scenario1/Images/CITrigger.PNG)
+
+
+**2)) There will be test projects which will create and maintained in the solution along the Web and API.**
+**The trigger should build all the 3 projects - Web, API and test.**
+ **The build should not be successful if any test fails.**
+I have created a sample C# solution containing 3 projects:
+1) ASP.NET Web API project
+2) ASP.NET MVC Web Application
+3) Unit Test Project
+
+The unit test project contains test cases to test the methods defined in Web Api controller class. The test project creates a simple list of product and validate the result generated from methods defined for getting all products and getting a single product by ID.
+
+For getting list
