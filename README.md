@@ -31,4 +31,5 @@ I have created a sample C# solution containing 3 projects:
 
 The unit test project contains test cases to test the methods defined in Web Api controller class. The test project creates a simple list of product and validate the result generated from methods defined for getting all products and getting a single product by ID.
 
-For getting list
+Link to controller class : [ProductController](Scenario1\Source\StoreApp\Controllers\ProductController.cs)
+Link to test class : [UnitTest1](Scenario1\Source\StoreApp.Tests\UnitTest1.cs)
