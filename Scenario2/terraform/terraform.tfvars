@@ -1,0 +1,14 @@
+resource_group_name = "terraform-rsg-demo"
+location = "uksouth"
+virtual_network_name = "test-vnet1-uksouth"
+virtual_network_location = "uksouth"
+virtual_network_address_space = [ "10.0.0.0/16" ]
+subnet1_name = "subnet1"
+subnet2_name = "subnet2"
+subnet1_address_space = ["10.0.1.0/24"]
+subnet2_address_space = ["10.0.2.0/24"]
+storage_account_name = "teststorage2code4dev"
+key_vault_name = "terraformkvc0de4dev"
+key_vault_rsg_name = "terraform-rg-demo"
+VM1_name = "firstVM"
+VM2_name = "SecondVM"

@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+variables:
+- group: Terraform-Variable-Group
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: TerraformInstaller@0
+  displayName: 'Install Terraform'
+  inputs:
+    terraformVersion: '1.0.5'
+
+- task: CmdLine@2
+  displayName: 'Initialize Terraform'
+  inputs:
+    script: 'terraform init -backend-config="access_key=$(storage-access-key1)"'
+    workingDirectory: 'terraform'
+
+- task: CmdLine@2
+  displayName: 'Validate Terraform'
+  inputs:
+    script: 'terraform validate'
+    workingDirectory: 'terraform'
+
+- task: CmdLine@2
+  displayName: 'Plan terraform'
+  inputs:
+    script: 'terraform plan -input=false -out=deploy.tfplan -var-file=terraform.tfvars -var="spn-client-id=$(spn-client-id)" -var="spn-client-secret=$(spn-client-secret)" -var="spn-tenant-id=$(spn-tenant-id)"'
+    workingDirectory: 'terraform'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/terraform'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
