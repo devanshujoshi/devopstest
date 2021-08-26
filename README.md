@@ -21,7 +21,7 @@ trigger:
 ![CIImage](Scenario1/Images/CITrigger.PNG)
 
 
-**2)) There will be test projects which will create and maintained in the solution along the Web and API.**
+**2) There will be test projects which will create and maintained in the solution along the Web and API.**
 **The trigger should build all the 3 projects - Web, API and test.**
  **The build should not be successful if any test fails.**
 I have created a sample C# solution containing 3 projects:
@@ -65,3 +65,25 @@ Azure Pipelines provide Visual Studio Test Task to run unit and functional tests
 
 ![TestCaseSuccess](Scenario1/Images/TestCaseSuccess.PNG)
 ![TestCaseResult](Scenario1/Images/TestCaseResult.PNG)
+
+
+**3) The deployment of code and artifacts should be automated to Dev environment.**
+Azure Devops release pipelines provide Continuous Delivery (CD) to build, test, configure, and deploy from a build to a production environment. Multiple testing or staging environments create a Release Pipeline to automate the creation of infrastructure and deployment of a new build.
+
+Continuous deployment triggers allow users to create a release every time a new build artifact is available.Select the Continuous deployment trigger icon in the Artifacts section to open the trigger panel. Make sure this is enabled so that a new release is created after every new successful build is completed.
+
+![CDTrigger](Scenario1/Images/CDTrigger.PNG)
+
+**4) Upon successful deployment to the Dev environment, deployment should be easily promoted to QA**
+**and Prod through automated process.**
+**5) The deployments to QA and Prod should be enabled with Approvals from approvers only.**
+Azure Devops release pipeline provide logical separation boundaries to run the tasks.It can be used to mark separation of environments (for example, Build, QA, and production). When users define multiple stages in a pipeline, by default, they run one after the other. You can specify the conditions for when a stage runs.Each stage in a release pipeline can be configured with pre-deployment and post-deployment conditions that can include waiting for users to manually approve or reject deployments, and checking with other automated systems that specific conditions are met.
+
+Select the Pre-deployment conditions icon in the Dev Stage section to open the conditions panel. Make sure that the trigger for deployment to this stage is set to After release. This means that a deployment will be initiated automatically when a new release is created from this release pipeline.
+![CDTriggerDev](Scenario1/Images/CDTriggerDev.PNG)
+
+Select the Pre-deployment conditions icon in the QA and Prod Stage section to open the conditions panel.Use the "Stage" option to deploy after deployments to selected stages are successful.
+![CDTriggerQA](Scenario1/Images/CDTriggerQA.PNG)
+
+It is recommended to always verify if app is working properly in Dev or test stage before deploying to production or other environments. Adding Pre-deployment approvals will ensure users can approve or reject deployments to stages.Select the users who can approve or reject deployments to this stage. By default, all users must approve the deployment. If a group is added, one user in the group must approve the deployment
+![CDApproval](Scenario1/Images/CDApproval.PNG)
