@@ -29,7 +29,21 @@ I have created a sample C# solution containing 3 projects:
 2) ASP.NET MVC Web Application
 3) Unit Test Project
 
-The unit test project contains test cases to test the methods defined in Web Api controller class. The test project creates a simple list of product and validate the result generated from methods defined for getting all products and getting a single product by ID.
+The unit test project contains test cases to test the methods defined in Web Api controller class. The test project creates a simple list of product and validate the results generated from methods defined for getting all products and getting a single product by ID.
 
-Link to controller class : [ProductController](Scenario1/Source/StoreApp/Controllers/ProductController.cs)
-Link to test class : [UnitTest1](Scenario1/Source/StoreApp.Tests/UnitTest1.cs)
+1. Link to controller class : [ProductController.cs](Scenario1/Source/StoreApp/Controllers/ProductController.cs)
+2. Link to test class : [UnitTest1.cs](Scenario1/Source/StoreApp.Tests/UnitTest1.cs)
+
+Azure Pipelines provide Visual Studio Build Task to build solution using MSBuild. Users can also build project (.*proj) files , default value for this task is **\*.sln which means solution file in any folder in the repo. The solution build task will build all projects under a solution.
+
+```
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+```
+
+Azure Pipelines provide Visual Studio Test Task to run unit and functional tests using Visual Studio Test Runner.
+
