@@ -9,7 +9,7 @@ triggers every night which build the solution and copy the build package to drop
 deployments were done to the respective environment manually. The customer is planning to setup 
 Azure DevOps Pipeline service for below requirements:
 
-1)The build should trigger as soon as anyone in the dev team checks in code to master branch.
+**1)The build should trigger as soon as anyone in the dev team checks in code to master branch.**
 Continuous integration (CI) triggers cause a pipeline to run whenever user push an update to the specified branches.
 YAML pipelines are configured by default with a CI trigger on all branches.Users can control which branches get CI triggers with a simple syntax:
 ```
@@ -17,3 +17,5 @@ trigger:
 - master
 - releases/*
 ```
+
+![CIImage](Scenario1/Images/CITrigger.PNG)
