@@ -45,5 +45,23 @@ Azure Pipelines provide Visual Studio Build Task to build solution using MSBuild
     configuration: '$(buildConfiguration)'
 ```
 
-Azure Pipelines provide Visual Studio Test Task to run unit and functional tests using Visual Studio Test Runner.
+Azure Pipelines provide Visual Studio Test Task to run unit and functional tests using Visual Studio Test Runner. Any failure during test case execution will result in failure of pipeline and it will not move to next tasks of publishing the build artifacts for release deployment.
 
+```
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+```
+1: Below screen shot is showing the pipeline execution when the test case execution failed and it aborted the pipeline execution:
+
+![TestCaseFailure](Scenario1/Images/TestCaseFailure.PNG)
+
+2: Below screen shots are showing the pipeline execution when the test case execution was successful and it moved to the next task of publishing the build artifacts:
+
+![TestCaseSuccess](Scenario1/Images/TestCaseSuccess.PNG)
+![TestCaseResult](Scenario1/Images/TestCaseResult.PNG)
