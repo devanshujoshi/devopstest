@@ -147,9 +147,10 @@ Terraform Plan Step :
 **1 Storage account**<br />
 Link to terraform Code for deploying above resources : [main.tf](terraform/main.tf)
 
-**5) Explain how will you access the password stored in Key Vault and use it as Admin Password in the VM Terraform template**
+**5) Explain how will you access the password stored in Key Vault and use it as Admin Password in the VM Terraform template**<br />
+
 With Azure DevOps, users can get sensitive data like Connection Strings, Secrets, API Keys. Users can get them directly from an Azure Key Vault using variable group, instead of configuring them on build pipeline using Azure Key vault task. 
-Azure key vault task can also be used to get the secrets from the key vault, main takeaways when it comes to choosing between a Variable Group and an Azure Key Vault Task are:
+Min takeaways when it comes to choosing between a Variable Group and an Azure Key Vault Task are:
 
  1. Use Variable Groups for configuration re-used across multiple pipelines
  2. Use the Azure Key Vault Task for single-purpose access to a vault from a specific pipeline
