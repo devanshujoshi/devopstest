@@ -111,7 +111,8 @@ The overall process is divided into CI Build pipeline and CD release pipeline. C
 The Build pipeline is created as YAML pipeline, refer to the YAML code here: [azure-pipelines.yml](azure-pipelines.yml)
 ![CIImage](Images/CIBuild.PNG)
 
-Below are the screenshots of the Azure Devops pipeline execution using above steps:
+Below are the screenshots of the Azure Devops pipeline execution using above steps:<br />
+
 Pipeline execution :
 ![CIImageExample](Images/CIBuildExample.PNG)
 
