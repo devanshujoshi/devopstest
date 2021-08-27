@@ -1,12 +1,3 @@
-variable "resource_group_name" {
-   type = string
-   description = "name of the resource group"
-}
-variable "location" {
- type = string
- description = "location"
-}
-
 variable "spn-client-id" {
    type = string
    description = "Client ID for SPN to authenticate"
@@ -22,6 +13,14 @@ variable "spn-tenant-id" {
    description = "Tenant ID for SPN to authenticate"
 }
 
+variable "resource_group_name" {
+   type = string
+   description = "name of the resource group"
+}
+variable "location" {
+ type = string
+ description = "location"
+}
 
 variable "virtual_network_name" {
    type = string
