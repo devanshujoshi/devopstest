@@ -97,12 +97,12 @@ We can also use Command Line task to execute the above commands using Terraform 
 The overall process is divided into CI Build pipeline and CD release pipeline. CI Build pipeline creates an artifact generated using terraform plan step, the CD release pipeline does the deployment to Azure using *.tfplan file.
 
 **Create Deployment Package**
-Code Checkin:- Checkin the code in Azure Devops repo using pull or push.
-Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
-Terraform Init:- Initialise terraform using remote azurerm backend to store the state file.This is done using Command Line task.
-Terraform Validate:- Validates the syntax and arguments of the Terraform configuration files in the repo, including argument and attribute names and types for resources.This is done using Command Line task.
-Terraform Plan:- Plan terraform using Command Line task to generate an executable plan.This is done using Command Line task.
-Publish Artifact:- Publish the artifact that has both the git content and the Terraform executable plan file.
+- Code Checkin:- Checkin the code in Azure Devops repo using pull or push.
+- Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
+- Terraform Init:- Initialise terraform using remote azurerm backend to store the state file.This is done using Command Line task.
+- Terraform Validate:- Validates the syntax and arguments of the Terraform configuration files in the repo, including argument and attribute names and types for resources.This is done using Command Line task.
+- Terraform Plan:- Plan terraform using Command Line task to generate an executable plan.This is done using Command Line task.
+- Publish Artifact:- Publish the artifact that has both the git content and the Terraform executable plan file.
 
 ![CIImage](Images/CIBuild.PNG)
 
@@ -115,17 +115,17 @@ Build Artifact :
 
 
 **Deploy Package**
-Download artifacts: The agent downloads the Azure Pipelines artifacts specified in the release pipeline.
- Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
+- Download artifacts:- The agent downloads the Azure Pipelines artifacts specified in the release pipeline.<br />
+
 Deployment Stage contains three tasks:
-Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
-Terraform Init:- Initialise terraform using remote azurerm backend to store the state file.This is done using Command Line task.
-Terraform Apply:- Run Terraform Apply using Command Line task that applies required additions/changes from the Terraform Plan.
+- Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
+- Terraform Init:- Initialise terraform using remote azurerm backend to store the state file.This is done using Command Line task.
+- Terraform Apply:- Run Terraform Apply using Command Line task that applies required additions/changes from the Terraform Plan.
 
 ![CDImage](Images/CDDeploy.PNG)
 
 
-Below are the screenshots of the Azure Devops release pipeline execution using above steps:
+Below are the screenshots of the Azure Devops release pipeline execution using above steps:<br />
 Replease Pipeline execution :
 ![CDDeployExample](Images/CDDeployExample.PNG)
 
@@ -138,14 +138,17 @@ Terraform Plan Step :
 **2 Subnet** 
 **NSG to open port 80 and 443**
 **1 Window VM in each subnet**
-**1 Storage account**
+**1 Storage account**<br />
 Link to terraform Code for deploying above resources : [Terraform](terraform/main.tf)
 
 **5) Explain how will you access the password stored in Key Vault and use it as Admin Password in the VM Terraform template**
-With Azure DevOps, users can get sensitive data like Connection Strings, Secrets, API Keys. Users can get them directly from an Azure Key Vault, instead of configuring them on build pipeline. Azure AD SPN used for authenticating pipeline with Azure subscription need to have permissions (and access policies) to Get and List secrets from an Azure Key Vault.
+With Azure DevOps, users can get sensitive data like Connection Strings, Secrets, API Keys. Users can get them directly from an Azure Key Vault using variable group, instead of configuring them on build pipeline using Azure Key vault task. 
 Azure key vault task can also be used to get the secrets from the key vault, main takeaways when it comes to choosing between a Variable Group and an Azure Key Vault Task are:
-1: Use Variable Groups for configuration re-used across multiple pipelines
-2: Use the Azure Key Vault Task for single-purpose access to a vault from a specific pipeline
+
+ 1. Use Variable Groups for configuration re-used across multiple pipelines
+ 2. Use the Azure Key Vault Task for single-purpose access to a vault from a specific pipeline
+
+Azure AD SPN used for authenticating pipeline with Azure subscription need to have permissions (and access policies) to Get and List secrets from an Azure Key Vault.
 
 I stored Terraform login information in Azure Key Vault such as:
 subscription_id
@@ -158,26 +161,25 @@ Below is the snip for variable group created for getting secret from key vault:
 
 Variable group can be used in yaml file using below snippet of code:
 
-``
+```
 variables:
 - group: Terraform-Variable-Group
-``
-They can be linked to release pipeline also.
 
-Once variable groups are linked or used in pipeline, they can be used as normal pipeline variables as below code used for terraform plan command :
+```
+They can be linked to release pipeline also.Once variable groups are linked or used in pipeline, they can be used as normal pipeline variables as below code used for terraform plan command :
 
-``
+```
 'terraform plan -input=false -out=deploy.tfplan -var-file=terraform.tfvars -var="spn-client-id=$(spn-client-id)" -var="spn-client-secret=$(spn-client-secret)" -var="spn-tenant-id=$(spn-tenant-id)"'`
 
-``
+```
 
 Since we are connected to Azure subscription using the SPN that have access to the key vault using access policies, we can now use the terraform data sources for accessing key vault and key vault secret using below resources:
-1:azurerm_key_vault
-2:azurerm_key_vault_secret
+- azurerm_key_vault
+- azurerm_key_vault_secret
 
 Above terraform resources can be used as below in our configuration :
 
-``
+```
 data "azurerm_key_vault" "keyvault" {
   name                = var.key_vault_name
   resource_group_name = var.key_vault_rsg_name
@@ -192,11 +194,11 @@ data "azurerm_key_vault_secret" "vmadminpassword" {
   name      = "vmadminpassword"
   key_vault_id = data.azurerm_key_vault.keyvault.id
 }
-``
+```
 
 The secret values then can be referenced in VM deployment resource as below : 
 
-``
+```
   admin_username      = data.azurerm_key_vault_secret.vmadminname.value
   admin_password      = data.azurerm_key_vault_secret.vmadminpassword.value
-``
+```
