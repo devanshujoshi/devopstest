@@ -101,13 +101,14 @@ We can also use Command Line task to execute the above commands using Terraform 
 The overall process is divided into CI Build pipeline and CD release pipeline. CI Build pipeline creates an artifact generated using terraform plan step, the CD release pipeline does the deployment to Azure using *.tfplan file.
 
 **Create Deployment Package**
-- Code Checkin:- Checkin the code in Azure Devops repo using pull or push.
-- Install Terraform:- Terraform installer task to install the download and install the terraform on build host.
+- Code Checkin:- Checkin the code in Azure Devops repo using pull or push.THe checkin to the branch should trigger the CI build everytime new code is updated or added.
+- Install Terraform:- Terraform installer task to download the terraform package on build host.
 - Terraform Init:- Initialise terraform using remote azurerm backend to store the state file.This is done using Command Line task.
 - Terraform Validate:- Validates the syntax and arguments of the Terraform configuration files in the repo, including argument and attribute names and types for resources.This is done using Command Line task.
 - Terraform Plan:- Plan terraform using Command Line task to generate an executable plan.This is done using Command Line task.
 - Publish Artifact:- Publish the artifact that has both the git content and the Terraform executable plan file.
 
+The Build pipeline is created as YAML pipeline, refer to the YAML code here: [azure-pipelines.yml](azure-pipelines.yml)
 ![CIImage](Images/CIBuild.PNG)
 
 Below are the screenshots of the Azure Devops pipeline execution using above steps:
