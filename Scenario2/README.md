@@ -11,19 +11,26 @@ automated using Azure DevOps using IaC(Infrastructure as Code)
 
 **1) What are different artifacts you need to create - name of the artifacts and its purpose**
 
-**providers.tf**
-Terraform relies on plugins called "providers" to interact with remote systems.Terraform configurations must declare which providers they require, so that Terraform can install and use them.
-
+- **providers.tf**
 When executing the terraform init command, Terraform will check that the version of the installed Terraform binary that executes the Terraform configuration file corresponds to the version specified in the required_version property of the terraform block.
 
-With regard to the specification of the provider version, when executing the terraform init command, if no version is specified, Terraform downloads the latest version of the provider, otherwise it downloads the specified version.After successful installation, Terraform writes information about the selected providers to the dependency lock file. Users should commit this file to your version control system to ensure that when you run terraform init again in future Terraform will select exactly the same provider versions. Use the -upgrade option if you want Terraform to ignore the dependency lock file and consider installing newer versions.
+```
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "2.56.0"
+   }
+ }
+}
+```
+Terraform relies on plugins called "providers" to interact with remote systems.Terraform configurations must declare which providers they require, so that Terraform can install and use them.When executing the terraform init command, if no version is specified, Terraform downloads the latest version of the provider, otherwise it downloads the specified version.After successful installation, Terraform writes information about the selected providers to the dependency lock file. 
 
-Terraform only supports authenticating to Azure via the Azure CLI. Authenticating using Azure PowerShell is not supported. Therefore, while users can use the Azure PowerShell module when doing your Terraform work, you first need to authenticate to Azure using the Azure CLI.
-The second option is recommended if you need to run the scripts on a CI/CD environment in an automated way. There are many ways to create the service principal including using Azure CLI or Azure PowerShell commands or Azure Potal. Below two steps define the process broadly for using SPN authentication:
-a. Create an Application in Azure Active Directory (which acts as a Service Principal)
-b. Grant the Application access to manage resources in the Azure Subscription
+To authenticate using SPN we need to do below as a pre-requisite:
+ 1. Create an Application in Azure Active Directory (which acts as a Service Principal)
+ 2. Grant the Application access to manage resources in the Azure Subscription
 
-The Azure provider block defines syntax that allows users to specify Azure subscription's authentication information:
+The Azure provider block defines syntax that allows users to specify Azure subscription's authentication information as below:
 
 ```
 provider "azurerm" {
@@ -35,14 +42,12 @@ provider "azurerm" {
 }
 ```
 
-**backend.tf**
+- **backend.tf**
 When executing the Terraform workflow commands, which are mainly terraform plan, terraform apply, and terraform destroy, Terraform has a mechanism that allows it to identify which resources need to be updated, added, or deleted. To perform this mechanism, Terraform maintains a file called a Terraform state file that contains all the details of the resources provisioned by Terraform. This Terraform state file is created the first time the terraform plan command is run and is updated with each action (apply or destroy).
 
 If several people are working together, this file must be shared by everyone or, by default, this file is created on the local workstation or on the workstation that contains the Terraform binary.Any deletion of this local file or poor manual editing can affect the execution of Terraform configuration.
 
-A solution to above problem is the use of a remote backend, which consists of storing this file in a remote, shared, and secure store.
-
-In the use of Terraform, there are several types of remote backends, such as S3, azurerm, Artifactory, and many others.Terraform remote backend for Azure , azurerm, store the Terraform state file in an Azure Storage Account.
+A solution to above problem is the use of a remote backend, which consists of storing this file in a remote, shared, and secure store.Terraform remote backend for Azure , azurerm, store the Terraform state file in an Azure Storage Account.
 
 Below code is used to store state file in remote storage account container:
 ```
@@ -55,13 +60,13 @@ terraform {
 }
 ```
 Terraform needs the value of storage account key to configure the remote backend which can be configured using below command:
-*key_value can be configured using environment variables on local system or pipeline variable in Azure Devops.*
+
 ```
 terraform init -backend-config="access_key=[key_value]"
 ```
+*key_value can be configured using environment variables on local system or pipeline variable in Azure Devops.*
 
-
-**variables.tf and terraform.tfvars**
+- **variables.tf and terraform.tfvars**
 When users write a Terraform configuration file where all the properties are hardcoded in the code, users often find themself faced with the problem of having to duplicate it in order to reuse it.They are input values used by code as configuration items. They are explicitly declared via one of the methods mentioned below :
 1: variables files, variable.tf and variable.tfvars
 2: Environment variables on the host where code is deployed from; these use the prefix TF_VAR eg TF_VAR_myvar=football
@@ -71,6 +76,7 @@ The *.tfvars file is used to define variables and the *.tf file declare that the
 
 **main.tf**
 The main.tf file contains the Terraform configuration of the resources to be provisioned.
+[main.tf](terraform/main.tf)
 
 
 **2) List the tools you will to create and store the Terraform templates.**
