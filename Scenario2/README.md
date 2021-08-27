@@ -12,8 +12,7 @@ automated using Azure DevOps using IaC(Infrastructure as Code)
 **1) What are different artifacts you need to create - name of the artifacts and its purpose**
 
 - **providers.tf**
-When executing the terraform init command, Terraform will check that the version of the installed Terraform binary that executes the Terraform configuration file corresponds to the version specified in the required_version property of the terraform block.
-
+Terraform relies on plugins called "providers" to interact with remote systems.Terraform configurations must declare which providers they require, so that Terraform can install and use them.When executing the terraform init command, if no version is specified, Terraform downloads the latest version of the provider, otherwise it downloads the specified version.After successful installation, Terraform writes information about the selected providers to the dependency lock file. 
 ```
 terraform {
   required_providers {
@@ -24,7 +23,6 @@ terraform {
  }
 }
 ```
-Terraform relies on plugins called "providers" to interact with remote systems.Terraform configurations must declare which providers they require, so that Terraform can install and use them.When executing the terraform init command, if no version is specified, Terraform downloads the latest version of the provider, otherwise it downloads the specified version.After successful installation, Terraform writes information about the selected providers to the dependency lock file. 
 
 To authenticate using SPN we need to do below as a pre-requisite:
  1. Create an Application in Azure Active Directory (which acts as a Service Principal)
@@ -35,7 +33,7 @@ The Azure provider block defines syntax that allows users to specify Azure subsc
 ```
 provider "azurerm" {
    features {}
-   subscription_id = "9b30d50f-1a4a-4247-92c6-f0784dd56139"
+   subscription_id = "9b30d50f-1a4a-xxxxS-xxxx-xxxxxxxxxxx"
    client_id = var.spn-client-id
    client_secret = var.spn-client-secret
    tenant_id = var.spn-tenant-id
@@ -68,13 +66,13 @@ terraform init -backend-config="access_key=[key_value]"
 
 - **variables.tf and terraform.tfvars**
 When users write a Terraform configuration file where all the properties are hardcoded in the code, users often find themself faced with the problem of having to duplicate it in order to reuse it.They are input values used by code as configuration items. They are explicitly declared via one of the methods mentioned below :
-1: variables files, variable.tf and variable.tfvars
-2: Environment variables on the host where code is deployed from; these use the prefix TF_VAR eg TF_VAR_myvar=football
-3: Flags passed to the terraform command for example terraform apply -var ‘myvar=football’
+ 1. variables files, variable.tf and variable.tfvars
+ 2. Environment variables on the host where code is deployed from; these use the prefix TF_VAR eg TF_VAR_myvar=football
+ 3. Flags passed to the terraform command for example terraform apply -var ‘myvar=football’
 
 The *.tfvars file is used to define variables and the *.tf file declare that the variable exists.
 
-**main.tf**
+- **main.tf**
 The main.tf file contains the Terraform configuration of the resources to be provisioned.
 [main.tf](terraform/main.tf)
 
@@ -93,11 +91,11 @@ I have used below tools to create and store Terraform templates:
 I have used Azure Devops pipelines to automate the deployment process to Azure. Azure Devops pipeline needs to be authenticated with Azure subscription which was done by creating Azure AD SPN and granting permission to Azure subscriptions.
 
 Azure Devops pipeline also provide automated tools that can be used to install the Terraform extension/task from Marketplace.The Terraform task enables running Terraform commands as part of Azure Build and Release Pipelines providing support for the following Terraform commands
-init
-validate
-plan
-apply
-destroy
+- init
+- validate
+- plan
+- apply
+- destroy
 
 We can also use Command Line task to execute the above commands using Terraform CLI. I have used this method instead of using the Terraform Task from Marketplace.
 The overall process is divided into CI Build pipeline and CD release pipeline. CI Build pipeline creates an artifact generated using terraform plan step, the CD release pipeline does the deployment to Azure using *.tfplan file.
