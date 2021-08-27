@@ -145,7 +145,7 @@ Terraform Plan Step :
 **NSG to open port 80 and 443**
 **1 Window VM in each subnet**
 **1 Storage account**<br />
-Link to terraform Code for deploying above resources : [Terraform](terraform/main.tf)
+Link to terraform Code for deploying above resources : [main.tf](terraform/main.tf)
 
 **5) Explain how will you access the password stored in Key Vault and use it as Admin Password in the VM Terraform template**
 With Azure DevOps, users can get sensitive data like Connection Strings, Secrets, API Keys. Users can get them directly from an Azure Key Vault using variable group, instead of configuring them on build pipeline using Azure Key vault task. 
